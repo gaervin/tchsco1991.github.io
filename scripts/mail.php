@@ -6,16 +6,17 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 /* New aliases. */
 use PHPMailer\PHPMailer\OAuth;
-use League\OAuth2\Client\Provider\Google;
+/* use League\OAuth2\Client\Provider\Google; */
 
-dirname("C:\Users\gaervin\github\atombomb\atom");
-require '..\vendor\phpmailer\phpmailer\src\Exception.php';
-require '..\vendor\phpmailer\phpmailer\src\PHPMailer.php';
-require '..\vendor\phpmailer\phpmailer\src\SMTP.php';
-require '..\vendor\autoload.php';
+/* dirname("https://github.com/gaervin/tchsco1991.github.io"); */
+require 'vendor/phpmailer/phpmailer/src/Exception.php';
+require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/phpmailer/src/SMTP.php';
+require 'vendor/autoload.php';
 
 /**
  * Example PHPMailer callback function.
@@ -97,7 +98,6 @@ $pass = 'K1ll3r90';
    /* Add a recipient. */
    //$mail->addAddress('gaervin@gmail.com', 'GMAIL');
    $mail->addAddress('gaervin@gmail.com', 'GMAIL');
-   $mail->addAddress('gaervin@gmail.com', 'GMAIL');
    /* Add CC and BCC */
    $mail->addCC('gaervin@centurylink.net', 'CenturyLink');
    $mail->addBCC('gary.ervin@mfgs.carahsoft.com', 'Carahsoft');
@@ -154,7 +154,7 @@ if(isset($_POST['submit'])){
     $quar_page = $_POST['quar_page'];
     $all_info = $bus_name . "\n\n" . $bus_owner . "\n\n" . $bus_street . "\n\n" . $bus_suite . "\n\n" . $bus_city . "\n\n" . $bus_state . "\n\n" . $bus_phone . "\n\n";
     $page_size = $full_page . "\n\n" . $half_page . "\n\n" . $quar_page . "\n\n";
-    $subject = "Phamplet Submission";
+    $subject = "Pamphlet Submission";
     $subject2 = "Copy of your form submission";
     $message = $bus_owner . " from " . $bus_name . " submitted and Advertisement or Acknowledgement:" . "\n\n" . $all_info . "\n\n" . $page_size . "\n\n" . $_POST['message'];
     $message2 = $bus_owner . "Here is a copy of your message " . "\n\n" . $_POST['message'];
