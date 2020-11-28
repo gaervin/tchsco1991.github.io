@@ -1,0 +1,334 @@
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+/* New aliases. */
+use PHPMailer\PHPMailer\OAuth;
+/* use League\OAuth2\Client\Provider\Google; */
+
+/* dirname("https://github.com/gaervin/tchsco1991.github.io"); */
+require 'vendor/phpmailer/phpmailer/src/Exception.php';
+require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require 'vendor/phpmailer/phpmailer/src/SMTP.php';
+require 'vendor/autoload.php';
+
+/**
+ * Example PHPMailer callback function.
+ * This is a global function, but you can also pass a closure (or any other callable)
+ * to the `action_function` property.
+ *
+ * @param bool   $result  result of the send action
+ * @param array  $to      email address of the recipient
+ * @param array  $cc      cc email addresses
+ * @param array  $bcc     bcc email addresses
+ * @param string $subject the subject
+ * @param string $body    the email body
+ */
+
+function callbackAction($result, $to, $cc, $bcc, $subject, $body)
+{
+    echo "Message subject: \"$subject\"\n";
+    foreach ($to as $address) {
+        echo "Message to {$address[1]} <{$address[0]}>\n";
+    }
+    foreach ($cc as $address) {
+        echo "Message CC to {$address[1]} <{$address[0]}>\n";
+    }
+    foreach ($bcc as $toaddress) {
+        echo "Message BCC to {$toaddress[1]} <{$toaddress[0]}>\n";
+    }
+    if ($result) {
+        echo "Message sent successfully\n";
+    } else {
+        echo "Message send failed\n";
+    }
+}
+
+require_once '..\vendor\autoload.php';
+
+
+/* Set the script time zone to UTC. */
+date_default_timezone_set('Etc/UTC');
+
+/* Information from the XOAUTH2 configuration. */
+$google_email = 'gaervin@centurylink.net';
+//$oauth2_clientId = '842406980449-q8gfv99qur1ndkit04isa6pu7fpg225n.apps.googleusercontent.com';
+//$oauth2_clientSecret = 'hXq1RTkcW2tYf3Kj-1Nc8tf6';
+//$oauth2_refreshToken = 'RefreshToken';
+$pass = 'K1ll3r90';
+
+/* Create a new PHPMailer object. Passing TRUE to the constructor enables exceptions. */
+//$mail = new PHPMailer(TRUE);
+
+/* Open the try/catch block. */
+
+  /* Create a new PHPMailer object. Passing TRUE to the constructor enables exceptions. */
+  $mail = new PHPMailer();
+  /* SMTP parameters. */
+   /* Tells PHPMailer to use SMTP. */
+   $mail->isSMTP();
+   /* SMTP server address. */
+   $mail->Host = 'smtp.centurylink.net';
+   /* Use SMTP authentication. */
+   $mail->SMTPAuth = true;
+   /* Set the encryption system. */
+   //$mail->SMTPSecure = 'tls';
+   //$mail->SMTPSecure = 'ssl';
+   /* SMTP authentication username. */
+   $mail->Username = $google_email;
+   /* SMTP authentication password. */
+   $mail->Password = $pass;
+   /* Set the SMTP port. */
+   $mail->Port = 587;
+   /* Enable SMTP debugging */
+    // SMTP::DEBUG_OFF = off (for production use)
+    // SMTP::DEBUG_CLIENT = client messages
+    // SMTP::DEBUG_SERVER = client and server messages
+   $mail->SMTPDebug = 3;
+   /* Set the mail sender. */
+   $mail->setFrom('gaervin@centurylink.net', 'TCHSco1991 Admin');
+   /* Add Reply-To */
+   // $mail->addReplyTo('info@mailtrap.io', 'Mailtrap');
+   /* Add a recipient. */
+   //$mail->addAddress('gaervin@gmail.com', 'GMAIL');
+   $mail->addAddress('gaervin@gmail.com', 'GMAIL');
+   /* Add CC and BCC */
+   $mail->addCC('gaervin@centurylink.net', 'CenturyLink');
+   $mail->addBCC('gary.ervin@mfgs.carahsoft.com', 'Carahsoft');
+
+   /* Set the subject. */
+   $mail->Subject = 'Test Email via SMTP using PHPMailer';
+   /* Set the mail message body. */
+   //$mail->Body = 'There is a great disturbance in the Force.';
+   $mail->isHTML(TRUE);
+   $mailContent = "<h1>Send HTML Email using SMTP in PHP</h1>
+    <p>This is a test email I am sending using SMTP mail server with PHPMailer.</p>";
+   // $mail->Body = '<html>There is a great disturbance in the <strong>Force</strong>.</html>';
+   $mail->Body = $mailContent;
+   $mail->AltBody = 'There is a great disturbance in the Force.';
+
+   /* Add Attachments (Multiple Attachments - Just Repeat) */
+   // $mail->addAttachment('path/to/file', 'Name of file');
+   // $mail->addAttachment('path/to/file', 'Name of file');
+   // $mail->addAttachment('path/to/file', 'Name of file');
+
+   /* Add an attachment from the string */
+   // $mysql_data = $mysql_row['blob_data'];
+   // $mail->addStringAttachment($mysql_data, 'db_data.db');
+   // $mail->addStringAttachment(file_get_contents($url), 'myfile.pdf');
+
+   /* To embed an image */
+   // $mail->addEmbeddedImage('path/to/image_file.jpg', 'image_cid');
+   // $mail->isHTML(true);
+   // $mail->Body = '<img src="cid:image_cid">';
+
+   /* Action Function */
+   //$mail->action_function = 'callbackAction';
+
+   /* Finally send the mail. */
+    if($mail->send()){
+        echo 'Message has been sent';
+    }else{
+        echo 'Message could not be sent.';
+        echo 'Mailer Error: ' . $mail->ErrorInfo;
+    }
+
+if(isset($_POST['submit'])){
+    $to = "gaervin@centurylink.net"; // this is your Email address
+    $from = $_POST['bus_email']; // this is the sender's Email address
+    $bus_name = $_POST['bus_name'];
+    $bus_owner = $_POST['bus_owner'];
+    $bus_street = $_POST['bus_street'];
+    $bus_suite = $_POST['bus_suite'];
+    $bus_city = $_POST['bus_city'];
+    $bus_state = $_POST['bus_state'];
+    $bus_phone = $_POST['bus_phone'];
+    $full_page = $_POST['full_page'];
+    $half_page = $_POST['half_page'];
+    $quar_page = $_POST['quar_page'];
+    $all_info = $bus_name . "\n\n" . $bus_owner . "\n\n" . $bus_street . "\n\n" . $bus_suite . "\n\n" . $bus_city . "\n\n" . $bus_state . "\n\n" . $bus_phone . "\n\n";
+    $page_size = $full_page . "\n\n" . $half_page . "\n\n" . $quar_page . "\n\n";
+    $subject = "Pamphlet Submission";
+    $subject2 = "Copy of your form submission";
+    $message = $bus_owner . " from " . $bus_name . " submitted and Advertisement or Acknowledgement:" . "\n\n" . $all_info . "\n\n" . $page_size . "\n\n" . $_POST['message'];
+    $message2 = $bus_owner . "Here is a copy of your message " . "\n\n" . $_POST['message'];
+
+    $headers = "From:" . $from;
+    $headers2 = "From:" . $to;
+    mail($to,$subject,$message,$headers);
+    // mail($from,$subject2,$message2,$headers2); // sends a copy of the message to the sender
+    // echo "Mail Sent. Thank you " . $first_name . ", we will contact you shortly.";
+    // You can also use header('Location: thank_you.php'); to redirect to another page.
+    // You cannot use header and echo together. It's one or the other.
+    }
+
+    function test_input($data) {
+      $data = trim($data);
+      $data = stripslashes($data);
+      $data = htmlspecialchars($data);
+      return $data;
+    }
+
+//Alternative approach using a closure
+//try {
+//    $mail->action_function = static function ($result, $to, $cc, $bcc, $subject, $body) {
+//        if ($result) {
+//            echo "Message sent successfully\n";
+//        } else {
+//            echo "Message send failed\n";
+//        }
+//    };
+
+?>
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="user-scalable = yes">
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      .column {
+        float: left;
+        width: 25%;
+        padding: 5px;
+      }
+
+      /* Clearfix (clear floats) */
+      .row::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+
+      .fieldset {
+        background-color: #eeeeee;
+       }
+
+      .legend {
+        background-color: gray;
+        color: white;
+        padding: 5px 10px;
+       }
+
+    </style>
+    <title>TCHS c/o 1991</title>
+  </head>
+  <body>
+    <br>
+    <h1><center><img src="img/tchs-tor-2.jpg" alt="" title=""><b>TCHS c/o 1991</b><img src="img/tchs-tor-2.jpg" alt="" title=""></h1></center>
+    <h2><center><b>Business/Organization Advertisement/Acknowledgement Registration Form</center></b></h2>
+    <h3><strong>* = Required</strong></h3>
+    <form action="scripts/mail.php" target="_blank" method="post">
+      <p style="font-size:15px;"><strong>Business/Organization Name*: </strong><input name="bus_name" size="50" pattern="[a-zA-Z0-9 ]+" placeholder="Business/Organization Name..." required="required" type="text"> </p>
+      <p style="font-size:15px;"><strong>Business/Organization Owner*: </strong><input name="bus_owner" size="40" pattern="[a-zA-Z ]+"  placeholder="Business/Organization Owner..." required="required" type="text"></p>
+      <fieldset>
+          <p style="font-size:15px;"><strong>Business/Organization Address*: </strong></p>
+          <p style="font-size:15px; padding-left:150px;"><strong>Street*: </strong><input name="bus_street" size="50" placeholder="Business/Organization Street Address..." required="required" type="text"></p>
+          <p style="font-size:15px; padding-left:150px;"><strong>Suite#: </strong><input name="bus_suite" size="15" pattern="[a-zA-Z0-9]+" placeholder="Suite#..." type="text"></p>
+          <p style="font-size:15px; padding-left:150px;"><strong>City*: </strong><input name="bus_city" size="50" placeholder="Business/Organization City..." required="required" type="text"></p>
+          <p style="font-size:15px; padding-left:150px;"><strong>State*: </strong>
+            <select name="bus_state" size="1">
+              <option selected="selected" value="">Business/Organization State...</option>
+              <option value="None">None</option>
+              <option value="">-- UNITED STATES --</option>
+              <option value="Alabama">Alabama</option>
+              <option value="Alaska">Alaska</option>
+              <option value="Arizona">Arizona</option>
+              <option value="Arkansas">Arkansas</option>
+              <option value="California">California</option>
+              <option value="Colorado">Colorado</option>
+              <option value="Connecticut">Connecticut</option>
+              <option value="Delaware">Delaware</option>
+              <option value="Florida">Florida</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Hawaii">Hawaii</option>
+              <option value="Idaho">Idaho</option>
+              <option value="Illinois">Illinois</option>
+              <option value="Indiana">Indiana</option>
+              <option value="Iowa">Iowa</option>
+              <option value="Kansas">Kansas</option>
+              <option value="Kentucky">Kentucky</option>
+              <option value="Louisiana">Louisiana</option>
+              <option value="Maine">Maine</option>
+              <option value="Maryland">Maryland</option>
+              <option value="Massachusetts">Massachusetts</option>
+              <option value="Michigan">Michigan</option>
+              <option value="Minnesota">Minnesota</option>
+              <option value="Mississippi">Mississippi</option>
+              <option value="Missouri">Missouri</option>
+              <option value="Montana">Montana</option>
+              <option value="Nebraska">Nebraska</option>
+              <option value="Nevada">Nevada</option>
+              <option value="New Hampshire">New Hampshire</option>
+              <option value="New Jersey">New Jersey</option>
+              <option value="New Mexico">New Mexico</option>
+              <option value="New York">New York</option>
+              <option value="North Carolina">North Carolina</option>
+              <option value="North Dakota">North Dakota</option>
+              <option value="Ohio">Ohio</option>
+              <option value="Oklahoma">Oklahoma</option>
+              <option value="Oregon">Oregon</option>
+              <option value="Pennsylvania">Pennsylvania</option>
+              <option value="Rhode Island">Rhode Island</option>
+              <option value="South Carolina">South Carolina</option>
+              <option value="South Dakota">South Dakota</option>
+              <option value="Tennessee">Tennessee</option>
+              <option value="Texas">Texas</option>
+              <option value="Utah">Utah</option>
+              <option value="Vermont">Vermont</option>
+              <option value="Virginia">Virginia</option>
+              <option value="Washington">Washington</option>
+              <option value="West Virginia">West Virginia</option>
+              <option value="Wisconsin">Wisconsin</option>
+              <option value="Wyoming">Wyoming</option>
+            </select>
+          </p>
+      </fieldset>
+
+      <p style="font-size:15px;"><strong>Business/Organization Phone*: </strong><input name="bus_phone" type="tel" size="60" placeholder="Business/Organization Phone #...(format: (123) 456-7890)" required="required"></p>
+      <p style="font-size:15px;"><strong>Business/Organization Email*: </strong><input name="bus_email" size="30" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{3,}$" placeholder="Business/Organization Email address..." required="required" type="email"></p>
+      <h2><center><b>Payment Methods<center></b></h2>
+        <center>
+          <div class="row">
+            <div class="column">
+              <p style="font-size:15px;" style="width:100%"><img src="img/paypal-2.jpg" alt=""><figcaption>PayPal</figcaption></p>
+            </div>
+            <div class="column">
+              <p style="font-size:15px;"><img src="img/cashapp-2.png" alt=""><figcaption>CashApp</figcaption></p>
+            </div>
+            <div class="column">
+              <p style="font-size:15px;"><img src="img/zelle-Logo-2.png" alt=""><figcaption>Zelle</figcaption></p>
+            </div>
+            <div class="column">
+              <p style="font-size:15px;"><img src="img/venmo-logo-2.png" alt=""><figcaption>Venmo</figcaption></p>
+            </div>
+          </div>
+        </center><br>
+        <br>
+      <p style="font-size:15px;"><strong>Advertisement Size*: </strong>
+        <br><br>
+        <center>
+        <input id="full_page" name="full_page" value="Full" type="radio" class="hidden"><img src="img/full_page.jpg" alt=""><center><figcaption>Full Page $20.00</figcaption></center><br>
+        <br>
+        <input id="half_page" name="half_page" value="Half" type="radio" class="hidden"><img src="img/half_page.jpg" alt=""><center><figcaption>Half Page $10.00</figcaption></center><br>
+        <br>
+        <input id="quar_page" name="quar_page" value="Quarter" type="radio" class="hidden"><img src="img/quar_page.jpg" alt=""><center><figcaption>Quarter Page $5.00</figcaption></center><br>
+        <br>
+        </center>
+      </p>
+      <br>
+      <p style="font-size:15px;"><strong>Advertisement/Acknowledgement Text*: </strong></p>
+      <textarea rows="50" name="message" cols="100" required="required" placeholder="Advertisement/Acknowledgement..."></textarea><br>
+      <br>
+
+      <input name="submit" formenctype="multipart/form-data" formtarget="_blank" value="Submit" type="submit">
+      <input name="reset" value="Reset" type="reset">
+
+    </form>
+
+  </body>
+</html>
