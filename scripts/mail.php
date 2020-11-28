@@ -50,7 +50,7 @@ function callbackAction($result, $to, $cc, $bcc, $subject, $body)
     }
 }
 
-require_once '..\vendor\autoload.php';
+require_once '/vendor/autoload.php';
 
 
 /* Set the script time zone to UTC. */
@@ -156,7 +156,7 @@ if(isset($_POST['submit'])){
     $page_size = $full_page . "\n\n" . $half_page . "\n\n" . $quar_page . "\n\n";
     $subject = "Pamphlet Submission";
     $subject2 = "Copy of your form submission";
-    $message = $bus_owner . " from " . $bus_name . " submitted and Advertisement or Acknowledgement:" . "\n\n" . $all_info . "\n\n" . $page_size . "\n\n" . $_POST['message'];
+    $message = $bus_owner . " from " . $bus_name . " submitted and Advertisement or Acknowledgement:" . "\n\n" . $all_info . "\n\n" . $page_size . "\n\n" . $_POST['adack'];
     $message2 = $bus_owner . "Here is a copy of your message " . "\n\n" . $_POST['message'];
 
     $headers = "From:" . $from;
