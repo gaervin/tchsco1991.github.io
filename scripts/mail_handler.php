@@ -3,7 +3,95 @@
 <head>
 </head>
 <body>
-<?php
+  <?php
+  use PHPMailer\PHPMailer\PHPMailer;
+  use PHPMailer\PHPMailer\Exception;
+  use PHPMailer\PHPMailer\SMTP;
+
+  /* New aliases. */
+  use PHPMailer\PHPMailer\OAuth;
+  /* use League\OAuth2\Client\Provider\Google; */
+
+  /* dirname("https://github.com/gaervin/tchsco1991.github.io"); */
+  require 'vendor/phpmailer/phpmailer/src/Exception.php';
+  require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+  require 'vendor/phpmailer/phpmailer/src/SMTP.php';
+  require 'vendor/autoload.php';
+
+  /**
+   * Example PHPMailer callback function.
+   * This is a global function, but you can also pass a closure (or any other callable)
+   * to the `action_function` property.
+   *
+   * @param bool   $result  result of the send action
+   * @param array  $to      email address of the recipient
+   * @param array  $cc      cc email addresses
+   * @param array  $bcc     bcc email addresses
+   * @param string $subject the subject
+   * @param string $body    the email body
+   */
+
+  function callbackAction($result, $to, $cc, $bcc, $subject, $body)
+  {
+      echo "Message subject: \"$subject\"\n";
+      foreach ($to as $address) {
+          echo "Message to {$address[1]} <{$address[0]}>\n";
+      }
+      foreach ($cc as $address) {
+          echo "Message CC to {$address[1]} <{$address[0]}>\n";
+      }
+      foreach ($bcc as $toaddress) {
+          echo "Message BCC to {$toaddress[1]} <{$toaddress[0]}>\n";
+      }
+      if ($result) {
+          echo "Message sent successfully\n";
+      } else {
+          echo "Message send failed\n";
+      }
+  }
+
+  require_once '/vendor/autoload.php';
+
+
+  /* Set the script time zone to UTC. */
+  date_default_timezone_set('Etc/UTC');
+
+  /* Information from the XOAUTH2 configuration. */
+  $google_email = 'gaervin@centurylink.net';
+  //$oauth2_clientId = '842406980449-q8gfv99qur1ndkit04isa6pu7fpg225n.apps.googleusercontent.com';
+  //$oauth2_clientSecret = 'hXq1RTkcW2tYf3Kj-1Nc8tf6';
+  //$oauth2_refreshToken = 'RefreshToken';
+  $pass = 'K1ll3r90';
+
+  /* Create a new PHPMailer object. Passing TRUE to the constructor enables exceptions. */
+  //$mail = new PHPMailer(TRUE);
+
+  /* Open the try/catch block. */
+
+    /* Create a new PHPMailer object. Passing TRUE to the constructor enables exceptions. */
+    $mail = new PHPMailer();
+    /* SMTP parameters. */
+     /* Tells PHPMailer to use SMTP. */
+     $mail->isSMTP();
+     /* SMTP server address. */
+     $mail->Host = 'smtp.centurylink.net';
+     /* Use SMTP authentication. */
+     $mail->SMTPAuth = true;
+     /* Set the encryption system. */
+     //$mail->SMTPSecure = 'tls';
+     //$mail->SMTPSecure = 'ssl';
+     /* SMTP authentication username. */
+     $mail->Username = $google_email;
+     /* SMTP authentication password. */
+     $mail->Password = $pass;
+     /* Set the SMTP port. */
+     $mail->Port = 587;
+     /* Enable SMTP debugging */
+      // SMTP::DEBUG_OFF = off (for production use)
+      // SMTP::DEBUG_CLIENT = client messages
+      // SMTP::DEBUG_SERVER = client and server messages
+     $mail->SMTPDebug = 3;
+     /* Set the mail sender. */
 if(isset($_POST['submit'])){
     $to = "gaervin@centurylink.net"; // this is your Email address
     $from = $_POST['bus_email']; // this is the sender's Email address
